@@ -10,10 +10,8 @@ volumes:
 
 services:
   config:
+    image: curlimages/curl:7.76.0
     container_name: c-config
-    build:
-      context: ./elasticsearch/config
-      dockerfile: ./Dockerfile
     command: /elasticsearch/configure.sh
     working_dir: /elasticsearch
     volumes:
