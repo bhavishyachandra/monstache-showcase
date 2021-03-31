@@ -9,7 +9,6 @@ volumes:
     driver: local
 
 services:
-
   config:
     container_name: c-config
     build:
@@ -76,8 +75,6 @@ services:
 
   mongo-0:
     image: mongo:4.4
-    logging:
-      driver: none
     container_name: c-mongo
     command: /scripts/mongo-run.sh
     working_dir: /scripts
@@ -103,23 +100,25 @@ services:
     restart: unless-stopped
 
   es7:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.0
-    logging:
-      driver: none
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.0
     container_name: c-es
     environment:
-      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms5g -Xmx5g"
     ulimits:
       memlock:
         soft: -1
         hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
     volumes:
-      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - esdata1:/usr/share/elasticsearch/data
     ports:
-      - "9200:9200"
+      - 9200:9200
+      - 9300:9300
     networks:
       - test
     healthcheck:
