@@ -12,7 +12,7 @@ services:
   config:
     image: curlimages/curl:7.76.0
     container_name: c-config
-    command: /elasticsearch/configure.sh
+    command: ["/elasticsearch/configure.sh"]
     working_dir: /elasticsearch
     volumes:
       - ./elasticsearch:/elasticsearch
@@ -22,7 +22,7 @@ services:
     networks:
       - test
     healthcheck:
-      test: "[ -f /run/health.check ] && exit 0 || exit 1"
+      test: "[ -f /home/curl_user/health.check ] && exit 0 || exit 1"
       interval: 2s
       timeout: 30s
       retries: 300

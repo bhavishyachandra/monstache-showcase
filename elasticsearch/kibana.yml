@@ -3,4 +3,4 @@ server.host: "0"
 elasticsearch.hosts: http://elasticsearch:9200
 map.tilemap.url: "https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
 map.tilemap.options.maxZoom: 20
-map.tilemap.options.attribution: 'Map tiles by [Stamen Design](http://stamen.com), under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0). Data by [OpenStreetMap](http://openstreetmap.org), under ODbL(http://www.openstreetmap.org/copyright).'
+map.tilemap.options.attribution: "Map tiles by [Stamen Design](http://stamen.com), under [CC BY 3.0](http://creativecommons.org/licenses/by/3.0). Data by [OpenStreetMap](http://openstreetmap.org), under ODbL(http://www.openstreetmap.org/copyright)."

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-set -m;
+set -m
 
 # if [ "$MONGO_ROLE" == "primary" ] ; then
-./mongo-users-setup.sh;
+./mongo-users-setup.sh
 # fi
 
 mongodb_cmd="mongod"
@@ -40,20 +40,20 @@ cmd="$cmd --auth"
 cmd="$cmd --storageEngine wiredTiger"
 
 # if [[ "$MONGO_OPLOG_SIZE" ]] ; then
-  # cmd="$cmd --oplogSize $OPLOG_SIZE"
+# cmd="$cmd --oplogSize $OPLOG_SIZE"
 # fi
 cmd="$cmd --oplogSize 128"
 
 # if [[ "$MONGO_BIND_IP" ]] ; then
-  # echo "MONGO_BIND_IP: Adding --bind_ip $MONGO_BIND_IP";
-  # cmd="$cmd --bind_ip $MONGO_BIND_IP"
+# echo "MONGO_BIND_IP: Adding --bind_ip $MONGO_BIND_IP";
+# cmd="$cmd --bind_ip $MONGO_BIND_IP"
 cmd="$cmd --bind_ip 0.0.0.0"
 # cmd="$cmd --bind_ip_all"
 # else
 #   echo "MONGO_BIND_IP: Ignoring --bind_ip option";
 # fi
 
-if [[ "$MONGO_REPLICA_SET_NAME" ]] ; then
+if [[ "$MONGO_REPLICA_SET_NAME" ]]; then
   cmd="$cmd --replSet $MONGO_REPLICA_SET_NAME"
 fi
 
@@ -74,6 +74,6 @@ $cmd &
 
 # Create the health.check file indicating healthy
 MONGO_CONTAINER_HEALTHCHECK_FILE_PATH=${MONGO_CONTAINER_HEALTHCHECK_FILE_PATH:-/data/health.check}
-echo '1' >> "$MONGO_CONTAINER_HEALTHCHECK_FILE_PATH"
+echo '1' >>"$MONGO_CONTAINER_HEALTHCHECK_FILE_PATH"
 
 fg
