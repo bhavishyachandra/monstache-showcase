@@ -11,7 +11,7 @@ echo "************************************************************"
 echo "Index template created"
 echo "************************************************************"
 
-echo '1' >>/run/health.check
+echo '1' >>/home/curl_user/health.check
 
 while true; do
 	sleep 20
