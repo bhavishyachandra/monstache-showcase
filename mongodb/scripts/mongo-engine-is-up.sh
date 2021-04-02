@@ -4,7 +4,7 @@ set -eo pipefail
 
 mongoIsUp() {
   if [ -z "$1" ] || [ "$1" != "no-ssl" ]; then
-    if mongo --quiet --host "localhost:27017/test" --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)' >/dev/null 2>&1; then
+    if mongo --quiet --host "localhost:27017" --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)' >/dev/null 2>&1; then
       # echo 'Mongo-Ping: OK';
       return 0
     else
@@ -12,7 +12,7 @@ mongoIsUp() {
       return 1
     fi
   else
-    if mongo --quiet --host "localhost:27017/test" --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)' >/dev/null 2>&1; then
+    if mongo --quiet --host "localhost:27017" --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)' >/dev/null 2>&1; then
       # echo 'Mongo-Ping: OK';
       return 0
     else
