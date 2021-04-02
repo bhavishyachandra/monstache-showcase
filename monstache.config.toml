@@ -1,4 +1,4 @@
-mongo-url = "mongodb://root-user:password@mongo-0:27017"
+mongo-url = "mongodb://root:password@mongo:27017"
 
 mapper-plugin-path = "/app/plugin.so"
 
@@ -7,6 +7,7 @@ elasticsearch-max-seconds = 5
 elasticsearch-max-conns = 6
 
 change-stream-namespaces = [""]
+direct-read-namespaces = ["chicago.crimes"]
 
 verbose = false
 

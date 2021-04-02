@@ -5,7 +5,7 @@ networks:
     driver: bridge
 
 volumes:
-  esdata1:
+  mongo:
     driver: local
 
 services:
@@ -28,25 +28,6 @@ services:
       retries: 300
     restart: unless-stopped
 
-  data:
-    image: mongo:4.4
-    container_name: c-data
-    command: /scripts/mongo-import.sh
-    working_dir: /scripts
-    volumes:
-      - ./mongodb/scripts:/scripts
-    depends_on:
-      monstache:
-        condition: service_healthy
-      config:
-        condition: service_healthy
-    environment:
-      MONGO_USER_ROOT_NAME: root-user
-      MONGO_USER_ROOT_PASSWORD: password
-      MONGO_AUTH_SOURCE: admin
-    networks:
-      - test
-
   monstache:
     image: rwynn/monstache:6.7.2
     container_name: c-monstache
@@ -56,8 +37,6 @@ services:
       - ./monstache.config.toml:/app/monstache.config.toml
       - ./plugin/plugin.so:/app/plugin.so
     depends_on:
-      mongo-0:
-        condition: service_healthy
       es7:
         condition: service_healthy
     ports:
@@ -67,32 +46,6 @@ services:
     healthcheck:
       test: "wget -q -O - http://localhost:8080/healthz"
       interval: 10s
-      timeout: 30s
-      retries: 300
-    restart: unless-stopped
-
-  mongo-0:
-    image: mongo:4.4
-    container_name: c-mongo
-    command: /scripts/mongo-run.sh
-    working_dir: /scripts
-    volumes:
-      - ./mongodb/scripts:/scripts
-    environment:
-      MONGO_REPLICA_SET_NAME: rs0
-      MONGO_REPLICAS: mongo-0:27017
-      MONGO_REPLICA_SET_MEMBERS: "[{'_id':0,'host':'mongo-0:27017','priority':1}]"
-      MONGO_USER_ROOT_NAME: root-user
-      MONGO_USER_ROOT_PASSWORD: password
-      MONGO_AUTH_SOURCE: admin
-      MONGO_BIND_IP: "0.0.0.0"
-    ports:
-      - "27017:27017"
-    networks:
-      - test
-    healthcheck:
-      test: "[ -f /data/health.check ] && exit 0 || exit 1"
-      interval: 2s
       timeout: 30s
       retries: 300
     restart: unless-stopped
@@ -125,3 +78,46 @@ services:
       timeout: 60s
       retries: 300
     restart: unless-stopped
+
+  mongo:
+    image: mongo:4.2
+    container_name: mongo
+    command: ["mongod", "--auth", "--replSet", "rs1"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "root"
+      MONGO_INITDB_ROOT_PASSWORD: "password"
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data/db
+    restart: always
+    networks:
+      - test
+
+  mongo-setup:
+    image: mongo:4.2
+    container_name: mongo-setup
+    environment:
+      - MONGO1=mongo
+      - RS=rs1
+      - USER=root
+      - PASSWORD=password
+    depends_on:
+      - mongo
+    volumes:
+      - ./mongodb/scripts/setup.sh:/scripts/setup.sh
+      - ./mongodb/scripts/data/crimes.csv:/scripts/data/crimes.csv
+    entrypoint: ["/scripts/setup.sh"]
+    networks:
+      - test
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    ports:
+      - 8091:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+    restart: always
