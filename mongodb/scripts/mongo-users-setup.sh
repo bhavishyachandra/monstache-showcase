@@ -68,9 +68,6 @@ else
   echo 'WARNING: Mongo backup user credentials are not provided!'
 fi
 
-echo "Shutting down..."
-mongo admin --eval "db.shutdownServer();"
-
 echo 'Sleeping 1 second...'
 sleep 1
 

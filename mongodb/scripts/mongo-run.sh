@@ -2,8 +2,6 @@
 
 set -m
 
-./mongo-users-setup.sh
-
 mongodb_cmd="mongod"
 
 cmd="$mongodb_cmd"
@@ -21,6 +19,9 @@ fi
 cmd="$cmd --dbpath /data/db"
 
 $cmd &
+
+./mongo-users-setup.sh
+
 ./mongo-rep-set-setup.sh
 
 ./mongo-db-setup.sh
