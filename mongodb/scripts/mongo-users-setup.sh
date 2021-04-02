@@ -16,6 +16,8 @@ fg
 echo "Waiting for engine to start"
 ./mongo-engine-wait.sh no-ssl
 
+./echo 'engine started'
+
 # mongo admin --eval "help" > /dev/null 2>&1
 # RET=$?
 
@@ -67,9 +69,6 @@ if [ ! -z "${MONGO_USER_APP_NAME+x}" ] && [ ! -z "${MONGO_USER_APP_PASSWORD+x}" 
 else
   echo 'WARNING: Mongo backup user credentials are not provided!'
 fi
-
-echo "Shutting down..."
-mongo admin --eval "db.shutdownServer();"
 
 echo 'Sleeping 1 second...'
 sleep 1
