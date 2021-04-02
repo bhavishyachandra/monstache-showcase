@@ -43,7 +43,7 @@ CPython version: 3.6.7
 OpenSSL version: OpenSSL 1.1.0f  25 May 2017
 ```
 
-Next you will want to download the public [dataset](https://catalog.data.gov/dataset/crimes-2001-to-present-398a4). You will
+Next you will want to download the public [dataset](https://data.cityofchicago.org/api/views/ijzp-q8t2/rows.csv?accessType=DOWNLOAD). You will
 want the .CSV format.  Please read all the rules and caveats associated with the public dataset before proceeding.
 
 When you have downloaded this large 1.5GB file you should copy it to the following location:

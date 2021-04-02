@@ -5,6 +5,9 @@ networks:
     driver: bridge
 
 volumes:
+  esdata1:
+    driver: local
+
   mongo:
     driver: local
 
@@ -121,3 +124,21 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
     restart: always
+    networks:
+      - test
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:7.10.0
+    environment:
+      ELASTICSEARCH_HOSTS: http://es7:9200
+    container_name: c-kibana
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./elasticsearch/kibana.yml:/usr/share/kibana/config/kibana.yml
+    networks:
+      - test
+    depends_on:
+      es7:
+        condition: service_healthy
+    restart: unless-stopped
